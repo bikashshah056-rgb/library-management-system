@@ -12,10 +12,24 @@ public class Main {
         try {
             bookDAO.createTable();
 
+
+            Book found = bookDAO.getBookById(1);
+            if (found != null) {
+                System.out.println("Found book: " + found.getTitle() + " (available: " + found.getAvailableCopies() + ")");
+
+
+                found.setAvailableCopies(found.getAvailableCopies() - 1);
+                bookDAO.updateBook(found);
+                System.out.println("Updated available copies to: " + found.getAvailableCopies());
+            } else {
+                System.out.println("No book with id 1 found.");
+            }
+
+
+            System.out.println("\nAll books now:");
             List<Book> books = bookDAO.getAllBooks();
-            System.out.println("Books currently in the database:");
             for (Book b : books) {
-                System.out.println(b.getId() + " - " + b.getTitle() + " by " + b.getAuthor());
+                System.out.println(b.getId() + " - " + b.getTitle() + " (available: " + b.getAvailableCopies() + ")");
             }
 
         } catch (SQLException e) {

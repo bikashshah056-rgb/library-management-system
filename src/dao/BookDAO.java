@@ -66,4 +66,59 @@ public class BookDAO {
         }
         return books;
     }
+
+    public Book getBookById(int id) throws SQLException {
+        String sql = "SELECT * FROM books WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Book(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("author"),
+                            rs.getString("isbn"),
+                            rs.getString("category"),
+                            rs.getInt("total_copies"),
+                            rs.getInt("available_copies")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public void updateBook(Book book) throws SQLException {
+        String sql = "UPDATE books SET title = ?, author = ?, isbn = ?, category = ?, " +
+                "total_copies = ?, available_copies = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setString(3, book.getIsbn());
+            ps.setString(4, book.getCategory());
+            ps.setInt(5, book.getTotalCopies());
+            ps.setInt(6, book.getAvailableCopies());
+            ps.setInt(7, book.getId());
+
+            ps.executeUpdate();
+        }
+    }
+
+    public void deleteBook(int id) throws SQLException {
+        String sql = "DELETE FROM books WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
 }
