@@ -1,41 +1,30 @@
 package main;
 
 import dao.BookDAO;
-import dao.MemberDAO;
 import model.Book;
-import model.Member;
-import model.Searchable;
+import model.BookNotAvailableException;
+import service.LibraryService;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         BookDAO bookDAO = new BookDAO();
-        MemberDAO memberDAO = new MemberDAO();
+        LibraryService libraryService = new LibraryService();
 
         try {
             bookDAO.createTable();
-            memberDAO.createTable();
 
-            String keyword = "hobbit";
+            // Try issuing "The Hobbit" (id 1) to member id 1
+            libraryService.issueBook(1, 1);
+            System.out.println("Book issued successfully!");
 
-            System.out.println("Searching books for: " + keyword);
-            List<Book> books = bookDAO.getAllBooks();
-            for (Book b : books) {
-                if (b.matches(keyword)) {
-                    System.out.println("Match: " + b.getTitle());
-                }
-            }
+            // Check available copies afterward
+            Book book = bookDAO.getBookById(1);
+            System.out.println("Available copies now: " + book.getAvailableCopies());
 
-            String keyword2 = "bikash";
-            System.out.println("\nSearching members for: " + keyword2);
-            List<Member> members = memberDAO.getAllMembers();
-            for (Member m : members) {
-                if (m.matches(keyword2)) {
-                    System.out.println("Match: " + m.getName());
-                }
-            }
-
+        } catch (BookNotAvailableException e) {
+            System.out.println("Cannot issue book: " + e.getMessage());
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
         }
