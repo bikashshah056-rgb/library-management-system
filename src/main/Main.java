@@ -1,17 +1,25 @@
 package main;
 
-import util.DatabaseConnection;
-import java.sql.Connection;
+import dao.BookDAO;
+import model.Book;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        BookDAO bookDAO = new BookDAO();
+
         try {
-            Connection conn = DatabaseConnection.getConnection();
-            System.out.println("Connected to the database successfully!");
-            conn.close();
+            bookDAO.createTable();
+
+            List<Book> books = bookDAO.getAllBooks();
+            System.out.println("Books currently in the database:");
+            for (Book b : books) {
+                System.out.println(b.getId() + " - " + b.getTitle() + " by " + b.getAuthor());
+            }
+
         } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 }
