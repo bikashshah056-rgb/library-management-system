@@ -1,10 +1,23 @@
 package model;
 
-public class Member {
+public class Member implements Searchable {
     private int id;
     private String name;
     private String email;
     private String phone;
+
+    public Member(int id, String name, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    @Override
+    public boolean matches(String keyword) {
+        return name.toLowerCase().contains(keyword.toLowerCase()) ||
+                email.toLowerCase().contains(keyword.toLowerCase());
+    }
 
     public int getId() {
         return id;
@@ -37,13 +50,4 @@ public class Member {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public Member(int id, String name, String email, String phone) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-
-    }
-
 }
