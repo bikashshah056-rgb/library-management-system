@@ -62,3 +62,14 @@ CREATE TABLE borrow_records (
 2. Open the project in IntelliJ IDEA (or any Java IDE).
 3. Ensure the sqlite-jdbc-3.53.4.0.jar file in the lib folder is added as a project library (File - Project Structure - Libraries).
 4. Run src/main/Main.java. The database file (library.db) and all tables will be created automatically on first run.
+
+## Screenshots
+
+### Main Menu
+![Main Menu](screenshots/main-menu.png)
+
+### Search Books
+![Search Results](screenshots/search-results.png)
+
+### Exception Handling
+![Exception Handling](screenshots/exception-handling.png)
