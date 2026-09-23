@@ -18,7 +18,7 @@ A terminal-based Java application for managing a library's book catalog, member 
 - JDBC with the SQLite JDBC driver (v3.53.4.0)
 - SQLite database (no server setup required)
 
--## Database Setup
+## Database Setup
 
 The application automatically creates all required tables on first run. The schema is also provided separately in schema.sql for reference:
 
@@ -50,8 +50,10 @@ CREATE TABLE borrow_records (
     FOREIGN KEY (book_id) REFERENCES books(id),
     FOREIGN KEY (member_id) REFERENCES members(id)
 );
+```
 
-## Setup and Run Instructions
+
+ ## Setup and Run Instructions
 
 1. Clone this repository:
 ```bash
