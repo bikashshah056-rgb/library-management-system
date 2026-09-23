@@ -24,10 +24,8 @@ public class LibraryService {
             throw new BookNotAvailableException("'" + book.getTitle() + "' has no available copies right now.");
         }
 
-
         book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookDAO.updateBook(book);
-
 
         LocalDate today = LocalDate.now();
         LocalDate dueDate = today.plusDays(14);
@@ -35,5 +33,25 @@ public class LibraryService {
         BorrowRecord record = new BorrowRecord(0, bookId, memberId, today.toString(), dueDate.toString(), null);
         borrowDAO.addBorrowRecord(record);
     }
-}
 
+    public void returnBook(int recordId) throws SQLException, BookNotAvailableException {
+        BorrowRecord record = borrowDAO.getBorrowRecordById(recordId);
+
+        if (record == null) {
+            throw new BookNotAvailableException("No borrow record found with id " + recordId);
+        }
+
+        if (record.getReturnDate() != null) {
+            throw new BookNotAvailableException("This book has already been returned.");
+        }
+
+        Book book = bookDAO.getBookById(record.getBookId());
+        if (book != null) {
+            book.setAvailableCopies(book.getAvailableCopies() + 1);
+            bookDAO.updateBook(book);
+        }
+
+        LocalDate today = LocalDate.now();
+        borrowDAO.markAsReturned(recordId, today.toString());
+    }
+}

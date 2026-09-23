@@ -10,7 +10,6 @@ import model.BookNotAvailableException;
 import service.LibraryService;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -180,11 +179,12 @@ public class Main {
         int recordId = getValidIntInput();
 
         try {
-            String today = LocalDate.now().toString();
-            borrowDAO.markAsReturned(recordId, today);
-            System.out.println("Book marked as returned.");
+            libraryService.returnBook(recordId);
+            System.out.println("Book marked as returned successfully!");
+        } catch (BookNotAvailableException e) {
+            System.out.println("Cannot return book: " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("Failed to return book: " + e.getMessage());
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 
@@ -226,4 +226,4 @@ public class Main {
             System.out.println("Failed to load records: " + e.getMessage());
         }
     }
-}
+}5

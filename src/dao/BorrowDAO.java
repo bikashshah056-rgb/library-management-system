@@ -73,6 +73,22 @@ public class BorrowDAO {
         return overdue;
     }
 
+    public BorrowRecord getBorrowRecordById(int recordId) throws SQLException {
+        String sql = "SELECT * FROM borrow_records WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, recordId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToRecord(rs);
+                }
+            }
+        }
+        return null;
+    }
+
     public void markAsReturned(int recordId, String returnDate) throws SQLException {
         String sql = "UPDATE borrow_records SET return_date = ? WHERE id = ?";
 
